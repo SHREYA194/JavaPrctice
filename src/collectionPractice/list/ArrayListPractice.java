@@ -54,6 +54,7 @@ public class ArrayListPractice {
         arrayList.remove(2);
         System.out.println(arrayList);
 
+        arrayList.remove(Integer.valueOf(2));
         arrayList.remove(Integer.valueOf(5));
         System.out.println(arrayList);
 
