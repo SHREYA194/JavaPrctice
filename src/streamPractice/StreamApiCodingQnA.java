@@ -6,10 +6,103 @@ import java.util.stream.Collectors;
 public class StreamApiCodingQnA {
 
     public static void main(String[] args) {
-        OneTo10();
+//        oneTo10();
+        elevenTo20();
     }
 
-    private static void OneTo10() {
+    private static void elevenTo20() {
+        flatterList();
+        concatStr();
+        longestStr();
+        freqCharStr();
+        parStreamSum();
+        customCollector();
+        removeNullVals();
+        calcAvgNums();
+        collectMapFromList();
+        partEvenOdd();
+    }
+
+    // 20. Partition Numbers into Even and Odd
+    private static void partEvenOdd() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        Map<Boolean, List<Integer>> map = numbers.stream().collect(
+                Collectors.partitioningBy(a -> a%2==0));
+        System.out.println(map);
+    }
+
+    // 19. Collect Map from List
+    private static void collectMapFromList() {
+        List<String> words = Arrays.asList("Java", "Stream", "API");
+        Map<String, Integer> map = words.stream().collect(Collectors.toMap(c->c, String::length));
+        System.out.println(map);
+    }
+
+    // 18. Calculate Average of Numbers
+    private static void calcAvgNums() {
+        List<Integer> numbers = Arrays.asList(10, 20, 30, 40, 50);
+        Double avg = numbers.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+        System.out.println(avg);
+    }
+
+    // 17. Remove Null Values
+    private static void removeNullVals() {
+        List<String> words = Arrays.asList("Java", null, "Stream", null, "API");
+        List<String> filWords = words.stream().filter(Objects::nonNull).toList();
+        System.out.println(filWords);
+    }
+
+    // 16. Create Custom Collector
+    private static void customCollector() {
+        List<String> words = Arrays.asList("Java", "Stream", "API");
+        String s = words.stream().collect(Collectors.joining(", "));
+        System.out.println(s);
+    }
+
+    // 15. Parallel Stream to Compute Sum
+    private static void parStreamSum() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+        int sum = numbers.parallelStream().mapToInt(Integer::intValue).sum();
+        System.out.println(sum);
+    }
+
+    // 14. Count Frequency of Characters in a String
+    private static void freqCharStr() {
+        String input = "success";
+        Map<Character, Long> map = input.chars().mapToObj(c -> (char) c)
+                        .collect(Collectors.groupingBy(c->c, Collectors.counting()));
+        System.out.println(map);
+    }
+
+    // 13. Find the Longest String
+    private static void longestStr() {
+        List<String> words = Arrays.asList("Java", "Stream", "API", "Development");
+        String str = words.stream().reduce((w1,w2) -> w1.length() > w2.length() ? w1 : w2)
+                .orElse(null);
+        System.out.println(str);
+    }
+
+    // 12. Concatenate Strings
+    private static void concatStr() {
+        List<String> words = Arrays.asList("Stream", "API", "is", "powerful");
+        String str = words.stream().reduce("", (s1,s2) -> s1+" "+s2).trim();
+        System.out.println(str);
+    }
+
+    // 11. Flatten a List of Lists
+    private static void flatterList() {
+        List<List<Integer>> listOfLists = Arrays.asList(
+                Arrays.asList(1, 2, 3),
+                Arrays.asList(4, 5),
+                Arrays.asList(6, 7, 8, 9)
+        );
+
+        List<Integer> res = listOfLists.stream().flatMap(List::stream).toList();
+
+        System.out.println(res);
+    }
+
+    private static void oneTo10() {
         filterEvenNums();
         findMax();
         sortLst();
