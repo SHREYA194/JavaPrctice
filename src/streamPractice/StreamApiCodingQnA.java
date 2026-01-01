@@ -7,7 +7,99 @@ public class StreamApiCodingQnA {
 
     public static void main(String[] args) {
 //        oneTo10();
-        elevenTo20();
+//        elevenTo20();
+        twentyOneTo30();
+    }
+
+    private static void twentyOneTo30() {
+        nthLarget();
+        palindromicStrings();
+        reverseStr();
+        filConMapToList();
+        rmvDuplWithoutCollector();
+        mostFreqChar();
+        cmnEle();
+        sumSquEven();
+        partStrByPalin();
+        skipLimit();
+    }
+
+    // 30. Skip and Limit Elements
+    private static void skipLimit() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9);
+        List<Integer> res = numbers.stream().skip(3).limit(2).collect(Collectors.toList());
+        System.out.println(res);
+    }
+
+    // 29. Partition Strings by Palindrome
+    private static void partStrByPalin() {
+        List<String> words = Arrays.asList("radar", "level", "java", "stream");
+        Map<Boolean, List<String>> map = words.stream()
+                .collect(Collectors.partitioningBy(a -> a.equals(new StringBuilder(a).reverse().toString())));
+        System.out.println(map);
+    }
+
+    // 28. Find the Sum of Squares of Even Numbers
+    private static void sumSquEven() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
+        int sum =  numbers.stream().filter(n -> n%2==0).mapToInt(n -> n*n).sum();
+        System.out.println(sum);
+    }
+
+    // 27. Find Common Elements Between Two Lists
+    private static void cmnEle() {
+        List<Integer> list1 = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> list2 = Arrays.asList(3, 4, 5, 6, 7);
+
+        List<Integer> lst = list1.stream().filter(list2::contains).toList();
+        System.out.println(lst);
+    }
+
+    // 26. Find the Most Frequent Character in a String
+    private static void mostFreqChar() {
+        String input = "success";
+        char ch = input.chars().mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(c->c, Collectors.counting()))
+                .entrySet().stream().max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElseThrow();
+        System.out.println(ch);
+    }
+
+    // 25. Remove Duplicates Without Collectors
+    private static void rmvDuplWithoutCollector() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 2, 4, 3, 5);
+        List<Integer> nums = numbers.stream().distinct().toList();
+        System.out.println(nums);
+    }
+
+    // 24. Filter and Convert Map to List
+    // Given a map, filter entries with values greater than 10 and collect keys into a list.
+    private static void filConMapToList() {
+        Map<String, Integer> map = Map.of("A", 5, "B", 15, "C", 10, "D", 20);
+        List<String> lst = map.entrySet().stream().filter(a -> a.getValue() > 10).map(Map.Entry::getKey).toList();
+        System.out.println(lst);
+    }
+
+    // 23. Reverse Each String in a List
+    private static void reverseStr() {
+        List<String> words = Arrays.asList("Java", "Stream", "API");
+        List<String> rev = words.stream().map(a -> new StringBuilder(a).reverse().toString()).toList();
+        System.out.println(rev);
+    }
+
+    // 22. Find All Palindromic Strings
+    private static void palindromicStrings() {
+        List<String> words = Arrays.asList("radar", "level", "world", "java");
+        List<String> pal = words.stream().filter(a ->
+            a.equals(new StringBuilder(a).reverse().toString())
+        ).toList();
+        System.out.println(pal);
+    }
+
+    // 21. Find Nth Largest Element in a List
+    private static void nthLarget() {
+        List<Integer> numbers = Arrays.asList(10, 20, 50, 40, 30);
+        int a = numbers.stream().sorted(Comparator.reverseOrder()).skip(2).findFirst().orElseThrow();
+        System.out.println(a);
     }
 
     private static void elevenTo20() {
