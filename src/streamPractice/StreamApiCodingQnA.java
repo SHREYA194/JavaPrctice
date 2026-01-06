@@ -3,6 +3,7 @@ package streamPractice;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class StreamApiCodingQnA {
 
@@ -10,7 +11,153 @@ public class StreamApiCodingQnA {
 //        oneTo10();
 //        elevenTo20();
 //        twentyOneTo30();
-        thirtyOneTo40();
+//        thirtyOneTo40();
+        fourtyOneTo50();
+    }
+
+    private static void fourtyOneTo50() {
+        fibo();
+        empHighSalEachDept();
+        grpWordsByLen();
+        calcProdLst();
+        slidingWindowN();
+        anagrams();
+        pyramid();
+        maxPathSumTriangle();
+        nonRepeatingChar();
+        allSubSeq();
+    }
+
+    // 50. Find All Subsequences of a String
+    private static void allSubSeq() {
+        String str = "abc";
+        List<String> subSeqs = IntStream.range(0, 1 << str.length())
+                .mapToObj(i -> IntStream.range(0, str.length())
+                        .filter(j -> (i & (1<<j)) != 0)
+                        .mapToObj(j -> String.valueOf(str.charAt(j)))
+                        .collect(Collectors.joining()))
+                .collect(Collectors.toList());
+        System.out.println(subSeqs);
+    }
+
+    // 49. Find Non-Repeating Characters in a String
+    private static void nonRepeatingChar() {
+        String input = "swiss";
+        List<Character> nonRep = input.chars().mapToObj(c -> (char) c)
+                .filter(c -> input.chars().filter(ch -> ch == c).count() == 1)
+                .collect(Collectors.toList());
+        System.out.println(nonRep);
+    }
+
+    // 48. Find Maximum Path Sum in a Triangle
+    private static void maxPathSumTriangle() {
+        List<List<Integer>> triangle = Arrays.asList(
+                Arrays.asList(3),
+                Arrays.asList(7, 4),
+                Arrays.asList(2, 4, 6),
+                Arrays.asList(8, 5, 9, 3)
+        );
+
+        int maxSum = IntStream.range(0, triangle.size())
+                .mapToObj(i -> triangle.get(triangle.size()-1-i))
+                .reduce((rowBelow, currentRow) -> IntStream.range(0, currentRow.size())
+                        .mapToObj(j -> currentRow.get(j) + Math.max(rowBelow.get(j), rowBelow.get(j+1)))
+                        .collect(Collectors.toList()))
+                .orElse(List.of()).get(0);
+
+        System.out.println(maxSum);
+
+    }
+
+    // 47. Generate a Pyramid Pattern
+    private static void pyramid() {
+        int levels = 5;
+        List<String> pyramid = IntStream.rangeClosed(1,levels)
+                        .mapToObj(i -> " ".repeat(levels-i) + IntStream.rangeClosed(1,i)
+                                .mapToObj(String::valueOf).collect(Collectors.joining(" ")))
+                        .collect(Collectors.toList());
+        pyramid.forEach(System.out::println);
+    }
+
+    // 46. Detect Anagrams in a List
+    private static void anagrams() {
+        List<String> words = Arrays.asList("listen", "silent", "enlist", "google", "elbow", "below");
+        Map<String, List<String>> map = words.stream().collect(Collectors.groupingBy(
+                word -> word.chars().sorted().mapToObj(c -> String.valueOf((char) c))
+                        .collect(Collectors.joining())
+        ));
+        System.out.println(map);
+    }
+
+    // 45. Sliding Window of N Element
+    private static void slidingWindowN() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
+        List<List<Integer>> slw = IntStream.range(0, numbers.size()-2)
+                .mapToObj(i -> numbers.subList(i, i+3)).toList();
+        System.out.println(slw);
+    }
+
+    // 44. Calculate the Product of All Numbers
+    // Question: Calculate the product of all numbers in a list using reduce.
+    private static void calcProdLst() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+        int prod = numbers.stream().reduce(1, (a,b) -> a*b);
+        System.out.println(prod);
+    }
+
+    // 43. Group Words by Length and Sort Them
+    // Question: Group words by their length and sort each group alphabetically.
+    private static void grpWordsByLen() {
+        List<String> words = Arrays.asList("java", "stream", "api", "example", "code", "test");
+        Map<Integer, List<String>> map = words.stream().collect(Collectors.groupingBy(String::length,
+                Collectors.collectingAndThen(
+                        Collectors.toList(), list -> list.stream().sorted().toList()
+                )));
+        System.out.println(map);
+    }
+
+    // 42. Find Employees with Highest Salary in Each Department
+    private static void empHighSalEachDept() {
+        class Employee {
+            String name, department;
+            double salary;
+            Employee(String name, String department, double salary) {
+                this.name = name;
+                this.department = department;
+                this.salary = salary;
+            }
+
+            @Override
+            public String toString() {
+                return "Employee{" +
+                        "name='" + name + '\'' +
+                        ", department='" + department + '\'' +
+                        ", salary=" + salary +
+                        '}';
+            }
+        }
+
+        List<Employee> employees = Arrays.asList(
+                new Employee("Alice", "HR", 50000),
+                new Employee("Bob", "IT", 80000),
+                new Employee("Charlie", "IT", 75000),
+                new Employee("Dave", "HR", 60000),
+                new Employee("Eve", "Finance", 70000)
+        );
+
+        Map<String, Employee> map = employees.stream().collect(Collectors.groupingBy(e -> e.department,
+                Collectors.collectingAndThen(Collectors.maxBy(Comparator.comparingDouble(e -> e.salary)),
+                        Optional::get)));
+        System.out.println(map);
+    }
+
+    // 41. Generate Fibonacci Sequence Using Streams
+    // Question: Generate the first N numbers in the Fibonacci sequence.
+    private static void fibo() {
+        int n = 10;
+        List<Integer> fiboLst = Stream.iterate(new int[]{0,1}, arr -> new int[]{arr[1], arr[0]+arr[1]})
+                .limit(n).map(arr -> arr[0]).toList();
+        System.out.println(fiboLst);
     }
 
     private static void thirtyOneTo40() {
