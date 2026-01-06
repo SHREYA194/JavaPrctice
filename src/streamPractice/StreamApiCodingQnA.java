@@ -2,13 +2,157 @@ package streamPractice;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class StreamApiCodingQnA {
 
     public static void main(String[] args) {
 //        oneTo10();
 //        elevenTo20();
-        twentyOneTo30();
+//        twentyOneTo30();
+        thirtyOneTo40();
+    }
+
+    private static void thirtyOneTo40() {
+        longestWordFromSen();
+        cartProd();
+        topNHighestSco();
+        grpByFirstChar();
+        cusConStr();
+        median();
+        nestMapGroup();
+        detectCycleInGraphLikeStr();
+        wordWithMaxVowel();
+        runningSum();
+    }
+
+    // 40. Compute Running Sum
+    private static void runningSum() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+        List<Integer> runSum = IntStream.range(0,numbers.size())
+                .mapToObj(i -> numbers.subList(0,i+1).stream().mapToInt(Integer::intValue).sum()).toList();
+        System.out.println(runSum);
+    }
+
+    // 39. Find the Word with Maximum Vowels
+    private static void wordWithMaxVowel() {
+        List<String> words = Arrays.asList("stream", "java", "programming", "awesome");
+        String str = words.stream().max(Comparator.comparingInt(s -> (int) s.chars()
+                .filter(c -> "aeiou".indexOf(c) != -1).count())).orElse(null);
+
+        System.out.println(str);
+    }
+
+    // 38. Detect Cycles in a Graph-Like Structure
+    // Question: Detect cycles in a list of parent-child relationships.
+    private static void detectCycleInGraphLikeStr() {
+        class Node {
+            int id, parentId;
+            Node(int id, int parentId) {
+                this.id = id;
+                this.parentId = parentId;
+            }
+        }
+
+        List<Node> nodes = Arrays.asList(
+                new Node(1, 0), new Node(2, 1), new Node(3, 2), new Node(4, 3), new Node(5, 4), new Node(2, 5)
+        );
+
+        boolean hasCycle = nodes.stream().anyMatch(node -> nodes.stream()
+                .filter(n -> n.id == node.parentId).anyMatch(n -> n.id == node.id));
+
+        System.out.println(hasCycle);
+    }
+
+    // 37. Collect Nested Map by Grouping
+    // Question: Group employees by department and then by age.
+    private static void nestMapGroup() {
+        class Employee {
+            String name, department;
+            int age;
+            Employee(String name, String department, int age) {
+                this.name = name;
+                this.department = department;
+                this.age = age;
+            }
+        }
+
+        List<Employee> employees = Arrays.asList(
+                new Employee("Alice", "HR", 25),
+                new Employee("Bob", "IT", 30),
+                new Employee("Charlie", "HR", 30),
+                new Employee("Dave", "IT", 25)
+        );
+
+        Map<String, Map<Integer, List<String>>> map = employees.stream()
+                .collect(Collectors.groupingBy(e -> e.department, Collectors.groupingBy(e -> e.age,
+                        Collectors.mapping(e -> e.name, Collectors.toList()))));
+
+        System.out.println(map);
+    }
+
+    // 36. Find Median of a List
+    private static void median() {
+        List<Integer> numbers = Arrays.asList(3, 1, 4, 2, 5);
+        List<Integer> sortedNums = numbers.stream().sorted().toList();
+        double median = (sortedNums.size() % 2 == 0)
+                ? (sortedNums.get(sortedNums.size()/2 - 1) + sortedNums.get(sortedNums.size())/2) / 2.0
+                : sortedNums.get(sortedNums.size() / 2);
+
+        System.out.println(median);
+    }
+
+    // 35. Custom Reduce to Concatenate Strings
+    // Question: Concatenate strings in reverse order using reduce.
+    private static void cusConStr() {
+        List<String> words = Arrays.asList("Stream", "API", "is", "awesome");
+        String res = words.stream().reduce((w1, w2) -> w2 + " " + w1).orElse(null);
+        System.out.println(res);
+    }
+
+    // 34. Group by First Character
+    private static void grpByFirstChar() {
+        List<String> words = Arrays.asList("apple", "banana", "avocado", "blueberry", "cherry");
+        Map<Character, List<String>> map = words.stream().collect(Collectors.groupingBy(s -> s.charAt(0)));
+        System.out.println(map);
+    }
+
+    // 33. Find Top N Highest Scoring Students
+    private static void topNHighestSco() {
+        class Student {
+            String name;
+            int score;
+            Student(String name, int score) { this.name = name; this.score = score; }
+        }
+
+        List<Student> students = Arrays.asList(
+                new Student("Alice", 85),
+                new Student("Bob", 92),
+                new Student("Charlie", 88),
+                new Student("Dave", 78),
+                new Student("Eve", 91)
+        );
+
+        List<String> list = students.stream().sorted(Comparator.comparingInt((Student s) -> s.score).reversed())
+                .limit(3).map(s -> s.name).toList();
+
+        System.out.println(list);
+    }
+
+    // 32. Compute Cartesian Product of Two Lists
+    private static void cartProd() {
+        List<Integer> list1 = Arrays.asList(1, 2, 3);
+        List<Integer> list2 = Arrays.asList(4, 5);
+        List<String> res = list1.stream().flatMap(i -> list2.stream()
+                .map(j -> "("+i+","+j+")")).collect(Collectors.toList());
+        System.out.println(res);
+    }
+
+    // 31. Find the Longest Word from a Sentence
+    private static void longestWordFromSen() {
+        String sentence = "Java Stream API is very powerful";
+        String res = Arrays.stream(sentence.split(" ")).max(Comparator.comparing(String::length)).orElse(null);
+        System.out.println(res);
     }
 
     private static void twentyOneTo30() {
