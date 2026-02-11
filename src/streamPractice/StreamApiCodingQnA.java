@@ -13,7 +13,34 @@ public class StreamApiCodingQnA {
 //        twentyOneTo30();
 //        thirtyOneTo40();
 //        fourtyOneTo50();
-        fiftyOneTo60();
+//        fiftyOneTo60();
+        sixtyOneTo65();
+    }
+
+    private static void sixtyOneTo65() {
+        sortBasedOnFreq();
+        lstStrToSenCase();
+    }
+
+    // 62. Convert List of Strings to Sentence Case
+    private static void lstStrToSenCase() {
+        List<String> words = Arrays.asList("java", "stream", "api");
+
+        List<String> senCaseLst = words.stream()
+                .map(word -> word.substring(0,1).toUpperCase() + word.substring(1).toLowerCase())
+                .collect(Collectors.toList());
+
+        System.out.println(senCaseLst);
+    }
+
+    // 61. Sort a List Based on Frequency of Elements in descending order.
+    private static void sortBasedOnFreq() {
+        List<Integer> numbers = Arrays.asList(4, 5, 6, 5, 4, 3);
+
+        List<Integer> sortedLst = numbers.stream().sorted(Comparator.comparingInt(n -> -Collections.frequency(numbers, n)))
+                .distinct().collect(Collectors.toList());
+
+        System.out.println(sortedLst);
     }
 
     private static void fiftyOneTo60() {
