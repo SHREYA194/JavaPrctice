@@ -12,7 +12,123 @@ public class StreamApiCodingQnA {
 //        elevenTo20();
 //        twentyOneTo30();
 //        thirtyOneTo40();
-        fourtyOneTo50();
+//        fourtyOneTo50();
+        fiftyOneTo60();
+    }
+
+    private static void fiftyOneTo60() {
+        freqChars();
+        flatNestList();
+        duplEle();
+        convMapToLst();
+        checkLstSort();
+        findAllSubArray();
+        combineTwoListIntoMap();
+        pairSum();
+        randomNos();
+        longestIncreasingSubsequence();
+    }
+
+    // 60. Find Longest Increasing Subsequence
+    private static void longestIncreasingSubsequence() {
+        List<Integer> numbers = Arrays.asList(10, 9, 2, 5, 3, 7, 101, 18);
+        List<Integer> lis = new ArrayList<>();
+
+        numbers.forEach(num -> {
+            int pos = Collections.binarySearch(lis, num);
+            if (pos < 0) pos = -(pos+1);
+            if (pos < lis.size()) lis.set(pos, num);
+            else lis.add(num);
+        });
+
+        System.out.println(lis);
+    }
+
+    // 59. Generate Random Numbers Using Stream
+    private static void randomNos() {
+        List<Integer> list = new Random().ints(5, 1, 100)
+                .boxed().collect(Collectors.toList());
+
+        System.out.println(list);
+    }
+
+    // 58. Find Pair of Numbers with a Given Sum
+    private static void pairSum() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+        int targetSum = 6;
+
+        List<List<Integer>> pairs = numbers.stream()
+                .flatMap(a -> numbers.stream().filter(b -> a+b == targetSum && a<b)
+                        .map(b -> Arrays.asList(a,b)))
+                .collect(Collectors.toList());
+
+        System.out.println(pairs);
+    }
+
+    // 57. Combine Two Lists into a Map
+    private static void combineTwoListIntoMap() {
+        List<String> keys = Arrays.asList("A", "B", "C");
+        List<Integer> values = Arrays.asList(1, 2, 3);
+
+        Map<String, Integer> map = IntStream.range(0, keys.size())
+                .boxed().collect(Collectors.toMap(keys::get, values::get));
+
+        System.out.println(map);
+    }
+
+    // 56. Find All Subarrays of a List
+    private static void findAllSubArray() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3);
+
+        List<List<Integer>> subarrays = IntStream.range(0, numbers.size()).boxed()
+                .flatMap(i -> IntStream.rangeClosed(i+1, numbers.size())
+                        .mapToObj(j -> numbers.subList(i,j)))
+                .collect(Collectors.toList());
+
+        System.out.println(subarrays);
+    }
+
+    // 55. Check if a List is Sorted
+    private static void checkLstSort() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5);
+        boolean isSorted = IntStream.range(0, numbers.size()-1)
+                .allMatch(i -> numbers.get(i) <= numbers.get(i+1));
+        System.out.println(isSorted);
+    }
+
+    // 54. Convert Map to List of Key-Value Pairs
+    private static void convMapToLst() {
+        Map<String, Integer> map = Map.of("A", 1, "B", 2, "C", 3);
+        List<String> lst = map.entrySet().stream()
+                .map(entry -> entry.getKey() + "-" + entry.getValue()).collect(Collectors.toList());
+        System.out.println(lst);
+    }
+
+    // 53. Find Duplicate Elements in a List
+    private static void duplEle() {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 2, 5, 3, 6);
+        Set<Integer> dup = numbers.stream().filter(n -> Collections.frequency(numbers, n) > 1).collect(Collectors.toSet());
+        System.out.println(dup);
+    }
+
+    // 52. Flatten a Nested List
+    private static void flatNestList() {
+        List<List<Integer>> nestedList = Arrays.asList(
+                Arrays.asList(1, 2, 3),
+                Arrays.asList(4, 5),
+                Arrays.asList(6, 7, 8, 9)
+        );
+
+        List<Integer> list = nestedList.stream().flatMap(List::stream).collect(Collectors.toList());
+        System.out.println(list);
+    }
+
+    // 51. Count Frequency of Characters in a String
+    private static void freqChars() {
+        String input = "success";
+        Map<Character, Long> map = input.chars().mapToObj(c -> (char) c)
+                .collect(Collectors.groupingBy(ch -> ch, Collectors.counting()));
+        System.out.println(map);
     }
 
     private static void fourtyOneTo50() {
